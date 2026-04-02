@@ -1,0 +1,18 @@
+﻿body { background: #f7f8fb; }
+
+#form-content ul { margin-bottom: 0.25rem; }
+
+#data-instruktur .badge {
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.table td, .table th { vertical-align: middle; }
+
+
+/* Fix: jquery-bar-rating fontawesome-stars expects FA4. Use FA5 instead. */
+.br-theme-fontawesome-stars .br-widget a:after {
+  font-family: 'Font Awesome 5 Free' !important;
+  font-weight: 900 !important;
+}
+
