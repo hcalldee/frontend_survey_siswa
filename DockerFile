@@ -2,15 +2,15 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+# Copy urusan dependensi dulu
+COPY package*.json ./
 RUN npm ci --omit=dev
 
-COPY server.js ./
-COPY routes ./routes
-COPY views ./views
-COPY public ./public
+# Copy semua file (kecuali yang ada di .dockerignore)
+COPY . .
 
 ENV PORT=4173
 EXPOSE 4173
 
+# Pake node biasa di Dockerfile, nanti kita timpa pas Run
 CMD ["node", "server.js"]

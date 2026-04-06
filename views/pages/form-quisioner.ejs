@@ -1,13 +1,115 @@
 ﻿<%
   const pageBody = `
-<h1 class="h3 mb-4 text-gray-800">Form Quisioner</h1>
+<style>
+  :root{
+    --col-no: 46px;
+    --col-q: 320px;
+  }
 
-<div class="card shadow mb-4">
-  <div class="card-header py-3 d-flex justify-content-between align-items-center">
+  /* Layout dasar */
+  #form-content { padding: 0.75rem; }
+
+  #tabel-rating td, #tabel-rating th { vertical-align: middle; }
+  #tabel-rating .br-widget a { font-size: 22px; padding: 2px 2px; }
+
+  /* Fix icon bintang: theme fontawesome-stars defaultnya FA4 */
+  .br-theme-fontawesome-stars .br-widget a:after {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+  }
+
+  /* Kolom rating (mulai kolom ke-3) dikasih lebar supaya swipe kerasa */
+  #tabel-rating tr > :nth-child(n+3){
+    min-width: 140px;
+    text-align: center;
+  }
+
+  /* Wrapper tabel: scroll horizontal + vertical khusus tabel */
+  .rating-table-shell{
+    width: 100%;
+    max-width: 100%;
+    display: block;
+
+    max-height: 60vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    overscroll-behavior: contain;
+
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: .25rem;
+    background: #fff;
+  }
+
+  /* Biar tabel bisa melebar mengikuti jumlah instruktur */
+  #tabel-rating{
+    width: max-content;
+    min-width: 100%;
+    margin-bottom: 0;
+  }
+
+  /* Default kolom jangan wrap */
+  #tabel-rating th, #tabel-rating td { white-space: nowrap; }
+
+  /* Pertanyaan boleh wrap dan fix width */
+  #tabel-rating td:nth-child(2),
+  #tabel-rating th:nth-child(2),
+  #tabel-rating td.w-40 {
+    white-space: normal !important;
+    min-width: var(--col-q);
+    max-width: var(--col-q);
+    word-break: break-word;
+  }
+
+  /* Sticky kolom No */
+  #tabel-rating tr > :first-child{
+    position: sticky;
+    left: 0;
+    min-width: var(--col-no);
+    width: var(--col-no);
+    background: #fff;
+    z-index: 5;
+  }
+
+  /* Sticky kolom Pertanyaan */
+  #tabel-rating tr > :nth-child(2){
+    position: sticky;
+    left: var(--col-no);
+    background: #fff;
+    z-index: 4;
+  }
+
+  /* Header backgrounds supaya sticky rapi */
+  #tabel-rating tr.table-primary > th,
+  #tabel-rating tr.table-primary > td{ background: #cfe2ff !important; }
+
+  #tabel-rating tr.table-secondary > th,
+  #tabel-rating tr.table-secondary > td{ background: #e2e3e5 !important; }
+
+  #tabel-rating tr.table-info > th,
+  #tabel-rating tr.table-info > td{ background: #cff4fc !important; }
+
+  #tabel-rating textarea{ min-height: 70px; font-size: 14px; }
+
+  @media (max-width: 480px){
+    :root{ --col-q: 250px; }
+    #tabel-rating .br-widget a { font-size: 20px; }
+  }
+
+  @media (max-width: 768px){
+    .rating-table-shell{ max-height: 70vh; }
+  }
+</style>
+
+<h1 class="h3 mb-3 text-gray-800">Form Quisioner</h1>
+
+<!-- NOTE: no card wrapper, biar nggak nested -->
+<div>
+  <div class="d-flex justify-content-between align-items-center mb-2">
     <h6 class="m-0 font-weight-bold text-primary" id="content-title"></h6>
   </div>
 
-  <div class="card-body" style="height: 450px; overflow-y: auto;" id="form-content">
+  <div id="form-content">
     <div id="bag-konfirmasi">
       <table>
         <thead>
@@ -63,15 +165,18 @@
       </table>
     </div>
 
-    <div class="row" id="bag-quisioner" hidden>
-      <table class="table table-bordered border-primary" id="tabel-rating">
-        <tbody></tbody>
-      </table>
+    <div id="bag-quisioner" hidden>
+      <div class="small text-muted mb-2">Geser ke kanan/kiri untuk lihat kolom penilaian. Scroll ke bawah untuk lanjut pertanyaan.</div>
+      <div class="rating-table-shell">
+        <table class="table table-bordered border-primary" id="tabel-rating">
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <div class="card-footer" id="form-footer">
-    <div class="row justify-content-end">
+  <div class="mt-3" id="form-footer">
+    <div class="d-flex justify-content-end">
       <button class="btn btn-primary" id="btn-navigation-a">Mengerti, Lanjutkan</button>
     </div>
   </div>
@@ -82,3 +187,4 @@
 %>
 
 <%- include("../layouts/main", { title: "Form Quisioner", apiBase, body: pageBody, scripts: pageScripts }) %>
+
